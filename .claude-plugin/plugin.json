@@ -1,0 +1,22 @@
+{
+  "name": "claude-code-notifier",
+  "version": "1.0.0",
+  "description": "Get notified when Claude Code completes tasks — supports Feishu, DingTalk, WeCom, Telegram, Bark, Email, ServerChan, and custom webhooks",
+  "author": {
+    "name": "kevinWangSheng",
+    "url": "https://github.com/kevinWangSheng"
+  },
+  "repository": "https://github.com/kevinWangSheng/claude-code-notifier",
+  "license": "MIT",
+  "keywords": [
+    "notification",
+    "webhook",
+    "feishu",
+    "dingtalk",
+    "wecom",
+    "wechat",
+    "telegram",
+    "bark",
+    "email"
+  ]
+}

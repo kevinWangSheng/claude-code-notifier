@@ -1,0 +1,66 @@
+{
+  "enabled": true,
+  "language": "zh",
+  "min_duration_seconds": 30,
+  "cooldown_seconds": 10,
+  "quiet_hours": {
+    "enabled": false,
+    "start": "23:00",
+    "end": "08:00"
+  },
+  "events": {
+    "stop": true,
+    "notification": true,
+    "task_completed": true,
+    "subagent_stop": false
+  },
+  "channels": [
+    {
+      "type": "feishu",
+      "webhook_url": "https://open.feishu.cn/open-apis/bot/v2/hook/YOUR_TOKEN",
+      "secret": "YOUR_SECRET_OR_REMOVE_THIS_FIELD",
+      "events": ["stop", "notification", "task_completed"]
+    },
+    {
+      "type": "dingtalk",
+      "webhook_url": "https://oapi.dingtalk.com/robot/send?access_token=YOUR_TOKEN",
+      "secret": "YOUR_SECRET_OR_REMOVE_THIS_FIELD"
+    },
+    {
+      "type": "wecom",
+      "webhook_url": "https://qyapi.weixin.qq.com/cgi-bin/webhook/send?key=YOUR_KEY"
+    },
+    {
+      "type": "telegram",
+      "bot_token": "123456:ABC-DEF1234ghIkl-zyx57W2v1u123ew11",
+      "chat_id": "YOUR_CHAT_ID"
+    },
+    {
+      "type": "bark",
+      "device_key": "YOUR_BARK_DEVICE_KEY",
+      "server_url": "https://api.day.app"
+    },
+    {
+      "type": "serverchan",
+      "key": "YOUR_SENDKEY"
+    },
+    {
+      "type": "email",
+      "smtp_host": "smtp.gmail.com",
+      "smtp_port": 465,
+      "username": "you@gmail.com",
+      "password": "your-app-password",
+      "from": "you@gmail.com",
+      "to": "you@gmail.com",
+      "events": ["notification"]
+    },
+    {
+      "type": "webhook",
+      "webhook_url": "https://your-server.com/hooks/claude",
+      "secret": "YOUR_HMAC_SECRET_OR_REMOVE_THIS_FIELD",
+      "headers": {
+        "X-Custom-Header": "value"
+      }
+    }
+  ]
+}
