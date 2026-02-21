@@ -32,14 +32,12 @@ Supports **8 notification channels**: Feishu, DingTalk, WeCom, Telegram, Bark (i
 
 # Install the plugin
 /plugin install claude-code-notifier
+
+# Run the interactive setup command — Claude will guide you through configuration
+/claude-code-notifier:setup
 ```
 
-Then create your config file:
-
-```bash
-cp ~/.claude/plugins/cache/claude-code-notifier/config.example.json ~/.claude/claude-notifier.json
-# Edit ~/.claude/claude-notifier.json with your webhook URLs
-```
+That's it! The `/claude-code-notifier:setup` command will ask you which channels to use, collect your webhook URLs/tokens, and write the config file automatically.
 
 **Option B: Git Clone + Interactive Setup**
 
@@ -254,14 +252,12 @@ node test/test-features.js    # 23 tests — filtering, cooldown, quiet hours, i
 
 # 安装插件
 /plugin install claude-code-notifier
+
+# 运行配置向导 — Claude 会引导你完成所有配置
+/claude-code-notifier:setup
 ```
 
-然后创建配置文件：
-
-```bash
-cp ~/.claude/plugins/cache/claude-code-notifier/config.example.json ~/.claude/claude-notifier.json
-# 编辑 ~/.claude/claude-notifier.json，填入你的 webhook 地址
-```
+就这么简单！`/claude-code-notifier:setup` 会问你要用哪些渠道，收集 webhook 地址/token，自动写入配置文件。
 
 **方式二：克隆 + 交互式安装**
 

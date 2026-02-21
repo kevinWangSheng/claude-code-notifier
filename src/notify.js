@@ -373,6 +373,30 @@ async function main() {
     if (event.session_id) {
       saveSessionStart(event.session_id);
     }
+    // First-run hint: if no config exists, create a template
+    const existingConfig = loadConfig(event.cwd);
+    if (!existingConfig) {
+      const configPath = path.join(os.homedir(), ".claude", "claude-notifier.json");
+      try {
+        fs.mkdirSync(path.dirname(configPath), { recursive: true });
+        if (!fs.existsSync(configPath)) {
+          const template = {
+            enabled: true,
+            language: "zh",
+            min_duration_seconds: 30,
+            cooldown_seconds: 10,
+            quiet_hours: { enabled: false, start: "23:00", end: "08:00" },
+            events: { stop: true, notification: true, task_completed: true, subagent_stop: false },
+            channels: [],
+          };
+          fs.writeFileSync(configPath, JSON.stringify(template, null, 2) + "\n");
+          process.stderr.write(
+            `[claude-code-notifier] Config template created at ${configPath}\n` +
+            `  Run /claude-code-notifier:setup to configure notification channels.\n`
+          );
+        }
+      } catch {}
+    }
     process.exit(0);
   }
 
