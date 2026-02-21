@@ -1,8 +1,15 @@
 {
+  "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
+  "name": "claude-code-notifier",
+  "description": "Get notified when Claude Code completes tasks — supports Feishu, DingTalk, WeCom, Telegram, Bark, Email, ServerChan, and Webhooks",
+  "owner": {
+    "name": "kevinWangSheng"
+  },
   "plugins": [
     {
       "name": "claude-code-notifier",
-      "path": "."
+      "description": "Task completion notifications with 8 channels, smart filtering, and zero dependencies",
+      "source": "."
     }
   ]
 }
