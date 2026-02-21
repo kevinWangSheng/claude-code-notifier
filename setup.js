@@ -285,13 +285,13 @@ async function testNotification(config) {
   };
 
   const cfgPath = path.join(os.tmpdir(), "notifier-setup-test.json");
-  fs.writeFileSync(cfgPath, JSON.stringify({ ...config, cooldown_seconds: 0 }));
+  fs.writeFileSync(cfgPath, JSON.stringify(config));
 
   const r = spawnSync("/bin/bash", ["-c",
     `echo '${JSON.stringify(event)}' | node ${NOTIFY_SCRIPT}`
   ], {
     timeout: 15000,
-    env: { ...process.env, CLAUDE_NOTIFIER_CONFIG: cfgPath },
+    env: { ...process.env, CLAUDE_NOTIFIER_CONFIG: cfgPath, CLAUDE_NOTIFIER_TEST: "1" },
   });
 
   try { fs.unlinkSync(cfgPath); } catch {}

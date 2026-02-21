@@ -103,8 +103,10 @@ Write the file using the Write tool to `~/.claude/claude-notifier.json`.
 After writing the config, offer to send a test notification:
 
 ```bash
-echo '{"hook_event_name":"Stop","session_id":"setup-test","cwd":"'$(pwd)'","last_assistant_message":"Setup complete! This is a test notification from claude-code-notifier."}' | CLAUDE_NOTIFIER_CONFIG=~/.claude/claude-notifier.json node ${CLAUDE_PLUGIN_ROOT}/src/notify.js
+echo '{"hook_event_name":"Stop","session_id":"setup-test","cwd":"'$(pwd)'","last_assistant_message":"Setup complete! This is a test notification from claude-code-notifier."}' | CLAUDE_NOTIFIER_TEST=1 CLAUDE_NOTIFIER_CONFIG=~/.claude/claude-notifier.json node ${CLAUDE_PLUGIN_ROOT}/src/notify.js
 ```
+
+The `CLAUDE_NOTIFIER_TEST=1` environment variable skips all filtering (cooldown, quiet hours, min_duration) so the test only verifies that the channels can send successfully.
 
 If `CLAUDE_PLUGIN_ROOT` is not available, try common locations or ask the user.
 

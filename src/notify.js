@@ -400,27 +400,40 @@ async function main() {
     process.exit(0);
   }
 
+  const isTestMode = process.env.CLAUDE_NOTIFIER_TEST === "1";
+
   const config = loadConfig(event.cwd);
   if (!config) {
     process.exit(0);
   }
 
-  if (config.enabled === false) {
+  if (config.enabled === false && !isTestMode) {
     process.exit(0);
   }
 
-  if (!shouldNotify(event, config)) {
-    process.exit(0);
-  }
+  // In test mode, skip all filtering — only verify that sending works
+  let channelConfigs;
 
-  // Quiet hours check
-  if (isInQuietHours(config.quiet_hours)) {
-    process.exit(0);
-  }
+  if (isTestMode) {
+    channelConfigs = config.channels || [];
+    if (channelConfigs.length === 0) {
+      process.stderr.write("notifier: no channels configured\n");
+      process.exit(1);
+    }
+  } else {
+    if (!shouldNotify(event, config)) {
+      process.exit(0);
+    }
 
-  // Cooldown check
-  if (!checkCooldown(config.cooldown_seconds)) {
-    process.exit(0);
+    // Quiet hours check
+    if (isInQuietHours(config.quiet_hours)) {
+      process.exit(0);
+    }
+
+    // Cooldown check
+    if (!checkCooldown(config.cooldown_seconds)) {
+      process.exit(0);
+    }
   }
 
   const message = buildMessage(event, config);
@@ -428,26 +441,28 @@ async function main() {
     process.exit(0);
   }
 
-  // Min duration check (only for Stop events — quick interactions don't need notifications)
-  const minDuration = config.min_duration_seconds;
-  if (minDuration && minDuration > 0 && hookEvent === "Stop") {
-    if (message.durationMs != null && message.durationMs < minDuration * 1000) {
+  if (!isTestMode) {
+    // Min duration check (only for Stop events — quick interactions don't need notifications)
+    const minDuration = config.min_duration_seconds;
+    if (minDuration && minDuration > 0 && hookEvent === "Stop") {
+      if (message.durationMs != null && message.durationMs < minDuration * 1000) {
+        process.exit(0);
+      }
+    }
+
+    // Filter channels by per-channel event settings
+    const eventKey = EVENT_KEY_MAP[hookEvent];
+    channelConfigs = (config.channels || []).filter((ch) =>
+      channelAcceptsEvent(ch, eventKey)
+    );
+
+    if (channelConfigs.length === 0) {
       process.exit(0);
     }
+
+    // Update cooldown timestamp
+    updateCooldown();
   }
-
-  // Filter channels by per-channel event settings
-  const eventKey = EVENT_KEY_MAP[hookEvent];
-  const channelConfigs = (config.channels || []).filter((ch) =>
-    channelAcceptsEvent(ch, eventKey)
-  );
-
-  if (channelConfigs.length === 0) {
-    process.exit(0);
-  }
-
-  // Update cooldown timestamp
-  updateCooldown();
 
   // Send to all matching channels concurrently
   const results = await Promise.allSettled(
