@@ -9,7 +9,7 @@
     {
       "name": "claude-code-notifier",
       "description": "Task completion notifications with 8 channels, smart filtering, and zero dependencies",
-      "source": "."
+      "source": "./"
     }
   ]
 }
